@@ -1,0 +1,128 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+using namespace std;
+
+class Polynomials;
+class PolynomialUtils
+{
+public:
+    int evaluate(const Polynomials &p, int x);
+    Polynomials derivative(const Polynomials &p);
+};
+class Polynomials
+{
+    vector<int> element;
+
+public:
+    Polynomials() : element(5, 0) {}
+    Polynomials(vector<int> &coeffs) : element(coeffs) {}
+    Polynomials operator+(const Polynomials &other)
+    {
+        int maxlength = max(element.size(), other.element.size());
+        Polynomials add;
+        add.element.resize(maxlength, 0);
+
+        for (int i = 0; i < maxlength; i++)
+        {
+            int a = (i < element.size()) ? element[i] : 0;
+            int b = (i < other.element.size()) ? other.element[i] : 0;
+            add.element[i] = a + b;
+        }
+        return add;
+    }
+    Polynomials operator-(const Polynomials &other)
+    {
+        int maxlength = max(element.size(), other.element.size());
+        Polynomials sub;
+        sub.element.resize(maxlength, 0);
+
+        for (int i = 0; i < maxlength; i++)
+        {
+            int a = (i < element.size()) ? element[i] : 0;
+            int b = (i < other.element.size()) ? other.element[i] : 0;
+            sub.element[i] = a - b;
+        }
+        return sub;
+    }
+    Polynomials operator*(const Polynomials &other)
+    {
+        int maxlength = element.size() + other.element.size() - 1;
+        Polynomials mul;
+        mul.element.resize(maxlength, 0);
+
+        for (int i = 0; i < element.size(); i++)
+        {
+            for (int j = 0; j < other.element.size(); j++)
+            {
+                mul.element[i + j] += element[i] * other.element[j];
+            }
+        }
+        return mul;
+    }
+    friend ostream &operator<<(ostream &out, const Polynomials &p)
+    {
+        for (int i = p.element.size() - 1; i >= 0; i--)
+        {
+            if (p.element[i] != 0)
+            {
+                out << p.element[i] << "x^" << i;
+                if (i > 0)
+                    out << " + ";
+            }
+        }
+        return out;
+    }
+
+    friend class PolynomialUtils;
+};
+int PolynomialUtils::evaluate(const Polynomials &p, int x)
+{
+    int result = 0;
+    for (int i = 0; i < p.element.size(); i++)
+    {
+        result += p.element[i] * pow(x, i);
+    }
+    return result;
+}
+Polynomials PolynomialUtils::derivative(const Polynomials &p)
+{
+
+    vector<int> derivative(p.element.size() - 1);
+    for (int i = 1; i < p.element.size(); i++)
+    {
+        derivative[i - 1] = i * p.element[i];
+    }
+
+    return Polynomials(derivative);
+}
+int main()
+{
+    vector<int> coeffs1 = {3, 2, 1};
+    vector<int> coeffs2 = {1, 4, 3};
+
+    Polynomials p1(coeffs1);
+    Polynomials p2(coeffs2);
+
+    PolynomialUtils utils;
+
+    cout << "Polynomial 1: " << p1 << endl;
+    cout << "Polynomial 2: " << p2 << endl;
+
+    Polynomials sum = p1 + p2;
+    cout << "Sum: " << sum << endl;
+
+    Polynomials diff = p1 - p2;
+    cout << "Difference: " << diff << endl;
+
+    Polynomials product = p1 * p2;
+    cout << "Product: " << product << endl;
+
+    int x = 2;
+    cout << "Evaluation of Polynomial 1 at x = " << x << ": " << utils.evaluate(p1, x) << endl;
+
+    Polynomials deriv = utils.derivative(p1);
+    cout << "Derivative of Polynomial 1: " << deriv << endl;
+
+    return 0;
+}
