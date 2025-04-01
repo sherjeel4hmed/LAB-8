@@ -1,0 +1,33 @@
+#include <iostream>
+using namespace std;
+class Test
+{
+    float x;
+
+public:
+    Test(int x) : x(x) {}
+    Test operator--()
+    {
+        x *= 4;
+        return *this;
+    }
+    Test operator--(int)
+    {
+        x = x / 4;
+        return *this;
+    }
+    void display()
+    {
+        cout << "Value: " << x << endl;
+    }
+};
+int main()
+{
+    Test t(5);
+    --t;
+    cout << "After Prefix (--obj): ";
+    t.display();
+    t--;
+    cout << "After Prefix (obj--): ";
+    t.display();
+}
