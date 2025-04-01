@@ -1,0 +1,83 @@
+#include <iostream>
+#include <vector>
+#include <cmath>
+using namespace std;
+class BigInteger
+{
+  vector<int> arbitary_numbers;
+
+public:
+  BigInteger() {}
+  BigInteger(const string num)
+  {
+    for (int i = num.size() - 1; i >= 0; --i)
+    {
+      arbitary_numbers.push_back(num.at(i) - '0');
+    }
+  }
+  BigInteger operator+(BigInteger &other)
+  {
+    vector<int> temp;
+    int maxLength = max(arbitary_numbers.size(), other.arbitary_numbers.size());
+    temp.resize(maxLength);
+    int sum = 0;
+    int carry = 0;
+    for (int i = 0; i < maxLength || carry != 0; i++)
+    {
+      sum = carry;
+      if (i < arbitary_numbers.size())
+        sum += arbitary_numbers[i];
+      if (i < other.arbitary_numbers.size())
+        sum += other.arbitary_numbers[i];
+      temp[i] = sum % 10;
+      carry = sum / 10;
+    }
+    BigInteger result;
+    result.arbitary_numbers = temp;
+    return result;
+  }
+  void display()
+  {
+    for (int i = arbitary_numbers.size() - 1; i >= 0; --i)
+    {
+      cout << arbitary_numbers[i];
+    }
+    cout << "\n";
+  }
+  BigInteger operator*(BigInteger &other)
+  {
+    vector<int> temp(arbitary_numbers.size() + other.arbitary_numbers.size() - 1, 0);
+    int ev;
+    for (int i = 0; i < arbitary_numbers.size(); i++)
+    {
+      for (int j = 0; j < other.arbitary_numbers.size(); j++)
+      {
+        temp[i + j] += arbitary_numbers[i] * other.arbitary_numbers[j];
+      }
+    }
+    int carry = 0;
+    for (int i = 0; i < temp.size(); ++i)
+    {
+      int sum = temp[i] + carry;
+      temp[i] = sum % 10;
+      carry = sum / 10;
+    }
+
+    BigInteger result;
+    result.arbitary_numbers = temp;
+    while (result.arbitary_numbers.size() > 1 && result.arbitary_numbers.back() == 0)
+    {
+      result.arbitary_numbers.pop_back();
+    }
+    return result;
+  }
+};
+int main()
+{
+  BigInteger n1("108"), n3, n4;
+  BigInteger n2("107");
+  n3 = n1 + n2;
+  n4 = n1 * n2;
+  n3.display();
+  n4.display();
+}
