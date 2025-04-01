@@ -1,0 +1,101 @@
+#include <iostream>
+using namespace std;
+
+class Person
+{
+protected:
+    string id;
+    virtual void getData() = 0;
+    virtual void displayData() = 0;
+
+public:
+    Person(string id) : id(id) {}
+};
+
+class Admin : public Person
+{
+    string name;
+    double monthly_income;
+    double bonus;
+
+public:
+    Admin(string id, string n, double mi) : Person(id), name(n), monthly_income(mi), bonus(0) {}
+
+    void getData()
+    {
+        cout << "Enter Admin's name: ";
+        cin >> name;
+        cout << "Enter Admin's monthly income: ";
+        cin >> monthly_income;
+    }
+
+    void displayData()
+    {
+        cout << "Name: " << name << endl;
+        cout << "ID: " << id << endl;
+        cout << "Monthly income: " << monthly_income << endl;
+        cout << "Annual bonus: " << bonus << endl;
+    }
+
+    void calculateBonus()
+    {
+        bonus = monthly_income * 12 * 0.05;
+        cout << "Admin's Annual Bonus on Monthly Income of " << monthly_income << " is: " << bonus << endl;
+    }
+};
+
+class Accounts : public Person
+{
+    string name;
+    double monthly_income;
+    double bonus;
+
+public:
+    Accounts(string id, string n, double mi) : Person(id), name(n), monthly_income(mi), bonus(0) {}
+
+    void getData()
+    {
+        cout << "Enter Accounts person's name: ";
+        cin >> name;
+        cout << "Enter Accounts person's monthly income: ";
+        cin >> monthly_income;
+    }
+
+    void displayData()
+    {
+        cout << "Name: " << name << endl;
+        cout << "ID: " << id << endl;
+        cout << "Monthly income: " << monthly_income << endl;
+        cout << "Annual bonus: " << bonus << endl;
+    }
+
+    void calculateBonus()
+    {
+        bonus = monthly_income * 12 * 0.05;
+        cout << "Accounts person's Annual Bonus on Monthly Income of " << monthly_income << " is: " << bonus << endl;
+    }
+};
+
+int main()
+{
+    string id, name;
+    double monthly_income;
+
+    cout << "Enter Admin Employee ID: ";
+    cin >> id;
+    Admin admin(id, name, monthly_income);
+    admin.getData();
+    admin.calculateBonus();
+    admin.displayData();
+
+    cout << endl;
+
+    cout << "Enter Accounts Employee ID: ";
+    cin >> id;
+    Accounts accounts(id, name, monthly_income);
+    accounts.getData();
+    accounts.calculateBonus();
+    accounts.displayData();
+
+    return 0;
+}
