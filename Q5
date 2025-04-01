@@ -1,0 +1,31 @@
+#include <iostream>
+using namespace std;
+class Shape
+{
+    float radius;
+
+public:
+    Shape(float r) : radius(r) {}
+    float Area() const
+    {
+        return radius * radius * 3.14;
+    }
+    Shape operator+(Shape &other)
+    {
+        Shape temp = Area() + other.Area();
+        return temp;
+    }
+};
+int main()
+{
+    Shape shape1(5);
+    Shape shape2(3);
+
+    Shape shape3 = shape1 + shape2;
+
+    cout << "Shape 1 Area: " << shape1.Area() << endl;
+    cout << "Shape 2 Area: " << shape2.Area() << endl;
+    cout << "Combined Shape Area: " << shape3.Area() << endl;
+
+    return 0;
+}
